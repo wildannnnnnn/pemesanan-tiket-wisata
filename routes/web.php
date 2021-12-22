@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +16,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->middleware('auth');
-
-Auth::routes([
-    'register'=> false, //menghilangkan fitur regis
+});
+Auth::route([
+    'register' => false,
+    'reset' => false,
 ]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['prefix'=>'pembelian','middleware'=> [
+    'auth',
+    'role:admin|kasir',
+]], function(){
+    Route::get('/', function(){
+        return 'halaman pembelian';
+    });
+    route::get('laporan', function () {
+        return 'halaman laporan pembelian';
+    });
+});
+
+
